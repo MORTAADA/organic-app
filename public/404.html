@@ -1,22 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Organic Chemistry</title>
-  <script>
-    // GitHub Pages SPA fallback
-    const path = window.location.pathname;
-    const repo = "/organic-app";
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Organic Chemistry Lab</title>
+    <script>
+      (function () {
+        var repo = "/organic-app";
+        var path = window.location.pathname;
+        var query = window.location.search;
+        var hash = window.location.hash;
 
-    if (path.startsWith(repo) && path !== repo + "/" && !path.includes(".")) {
-      const route = path.slice(repo.length);
-      sessionStorage.setItem("redirect", route + window.location.search + window.location.hash);
-      window.location.replace(repo + "/");
-    }
-  </script>
-</head>
-<body>
-  <p>Loading...</p>
-</body>
+        if (path.indexOf(repo) === 0) {
+          var route = path.slice(repo.length) || "/";
+          sessionStorage.setItem(
+            "gh-pages-redirect",
+            route + query + hash,
+          );
+          window.location.replace(repo + "/");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Chargement…</p>
+  </body>
 </html>
