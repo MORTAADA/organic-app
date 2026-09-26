@@ -4,16 +4,12 @@ on:
   push:
     branches:
       - main
-
   workflow_dispatch:
 
-# يمنع تشغيل أكثر من عملية Deploy في نفس الوقت.
-# إذا بدأت عملية جديدة، يتم إلغاء العملية القديمة.
 concurrency:
   group: pages
   cancel-in-progress: true
 
-# الصلاحيات المطلوبة لـ GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -24,34 +20,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # تحميل المشروع
       - name: Checkout
         uses: actions/checkout@v4
 
-      # إعداد Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
-      # تثبيت dependencies
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      # فحص TypeScript
       - name: TypeScript check
         run: npm run typecheck
 
-      # بناء المشروع
       - name: Build
         run: npm run build
 
-      # إعداد GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # رفع مجلد dist كـ artifact
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -67,7 +55,6 @@ jobs:
     needs: build
 
     steps:
-      # نشر artifact على GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
