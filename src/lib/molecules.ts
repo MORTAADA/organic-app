@@ -21,6 +21,10 @@ const colors = {
   hcn: "#facc15",
 };
 
+/* =========================================================
+   STRUCTURE DE BASE : CARBONYLE
+   ========================================================= */
+
 function carbonyl() {
   return {
     atoms: [
@@ -644,13 +648,13 @@ function acetalSteps(): MoleculeStep[] {
     {
       title: "Protonation du carbonyle",
       caption:
-        "H⁺ active l'oxygène du carbonyle et rend le carbone plus électrophile.",
+        "H⁺ protonne l'oxygène du carbonyle et rend le carbone plus électrophile.",
       atoms: [
         ...carbonyl().atoms,
         {
           id: "H",
           symbol: "H",
-          position: [2.0, 1.1, 0.1] as [number, number, number],
+          position: [2.0, 1.15, 0.1] as [number, number, number],
         },
       ],
       bonds: [
@@ -660,12 +664,19 @@ function acetalSteps(): MoleculeStep[] {
           to: "H",
         },
       ],
+      arrows: [
+        {
+          from: [2.0, 1.0, 0.1],
+          to: [1.4, 0.75, 0.05],
+          color: colors.alc,
+        },
+      ],
     },
 
     {
       title: "Addition nucléophile de R′OH",
       caption:
-        "Un alcool R′OH attaque le carbone du carbonyle.",
+        "Le premier alcool R′OH attaque le carbone du carbonyle; la liaison π(C=O) se déplace vers O.",
       atoms: [
         {
           id: "C",
@@ -675,7 +686,7 @@ function acetalSteps(): MoleculeStep[] {
         {
           id: "O",
           symbol: "O",
-          position: [1.25, 0.8, 0] as [number, number, number],
+          position: [1.3, 0.8, 0] as [number, number, number],
           charge: "-",
         },
         {
@@ -691,13 +702,13 @@ function acetalSteps(): MoleculeStep[] {
           label: "R′",
         },
         {
-          id: "Oalc",
+          id: "O1",
           symbol: "O",
           position: [1.3, -0.8, 0.7] as [number, number, number],
           charge: "+",
         },
         {
-          id: "Ralc",
+          id: "R1",
           symbol: "R",
           position: [2.3, -0.8, 1.2] as [number, number, number],
           label: "R′",
@@ -718,11 +729,11 @@ function acetalSteps(): MoleculeStep[] {
         },
         {
           from: "C",
-          to: "Oalc",
+          to: "O1",
         },
         {
-          from: "Oalc",
-          to: "Ralc",
+          from: "O1",
+          to: "R1",
         },
       ],
       arrows: [
@@ -742,7 +753,7 @@ function acetalSteps(): MoleculeStep[] {
     {
       title: "Hémiacétal",
       caption:
-        "Après déprotonation, l'intermédiaire hémiacétal est obtenu.",
+        "Après transfert de proton, on obtient l'hémiacétal R₂C(OH)(OR′).",
       atoms: [
         {
           id: "C",
@@ -752,18 +763,23 @@ function acetalSteps(): MoleculeStep[] {
         {
           id: "O",
           symbol: "O",
-          position: [1.25, 0.8, 0] as [number, number, number],
+          position: [1.3, 0.8, 0] as [number, number, number],
         },
         {
-          id: "Oalc",
+          id: "O1",
           symbol: "O",
           position: [1.3, -0.8, 0.7] as [number, number, number],
         },
         {
-          id: "Ralc",
+          id: "R1",
           symbol: "R",
           position: [2.3, -0.8, 1.2] as [number, number, number],
           label: "R′",
+        },
+        {
+          id: "H",
+          symbol: "H",
+          position: [2.1, 1.1, 0.1] as [number, number, number],
         },
         {
           id: "R",
@@ -784,12 +800,16 @@ function acetalSteps(): MoleculeStep[] {
           to: "O",
         },
         {
-          from: "C",
-          to: "Oalc",
+          from: "O",
+          to: "H",
         },
         {
-          from: "Oalc",
-          to: "Ralc",
+          from: "C",
+          to: "O1",
+        },
+        {
+          from: "O1",
+          to: "R1",
         },
         {
           from: "C",
@@ -805,7 +825,7 @@ function acetalSteps(): MoleculeStep[] {
     {
       title: "Protonation du groupe OH",
       caption:
-        "Le groupe OH est protoné pour former OH₂⁺, qui peut partir sous forme d'eau.",
+        "Le groupe OH est protoné pour former OH₂⁺, un bon groupe partant.",
       atoms: [
         {
           id: "C",
@@ -815,7 +835,7 @@ function acetalSteps(): MoleculeStep[] {
         {
           id: "O",
           symbol: "O",
-          position: [1.25, 0.8, 0] as [number, number, number],
+          position: [1.3, 0.8, 0] as [number, number, number],
           charge: "+",
         },
         {
@@ -824,12 +844,12 @@ function acetalSteps(): MoleculeStep[] {
           position: [2.1, 1.1, 0.1] as [number, number, number],
         },
         {
-          id: "Oalc",
+          id: "O1",
           symbol: "O",
           position: [1.3, -0.8, 0.7] as [number, number, number],
         },
         {
-          id: "Ralc",
+          id: "R1",
           symbol: "R",
           position: [2.3, -0.8, 1.2] as [number, number, number],
           label: "R′",
@@ -858,11 +878,11 @@ function acetalSteps(): MoleculeStep[] {
         },
         {
           from: "C",
-          to: "Oalc",
+          to: "O1",
         },
         {
-          from: "Oalc",
-          to: "Ralc",
+          from: "O1",
+          to: "R1",
         },
         {
           from: "C",
@@ -878,7 +898,7 @@ function acetalSteps(): MoleculeStep[] {
     {
       title: "Départ de H₂O",
       caption:
-        "L'eau quitte et forme un ion oxocarbenium stabilisé.",
+        "L'eau quitte et forme un ion oxocarbenium stabilisé par le groupe OR′.",
       atoms: [
         {
           id: "C",
@@ -887,12 +907,12 @@ function acetalSteps(): MoleculeStep[] {
           charge: "+",
         },
         {
-          id: "Oalc",
+          id: "O1",
           symbol: "O",
           position: [1.3, -0.8, 0.7] as [number, number, number],
         },
         {
-          id: "Ralc",
+          id: "R1",
           symbol: "R",
           position: [2.3, -0.8, 1.2] as [number, number, number],
           label: "R′",
@@ -912,18 +932,18 @@ function acetalSteps(): MoleculeStep[] {
         {
           id: "H2O",
           symbol: "O",
-          position: [2.7, 1.1, 0.6] as [number, number, number],
+          position: [2.8, 1.0, 0.5] as [number, number, number],
           label: "H₂O",
         },
       ],
       bonds: [
         {
           from: "C",
-          to: "Oalc",
+          to: "O1",
         },
         {
-          from: "Oalc",
-          to: "Ralc",
+          from: "O1",
+          to: "R1",
         },
         {
           from: "C",
@@ -934,12 +954,19 @@ function acetalSteps(): MoleculeStep[] {
           to: "Rp",
         },
       ],
+      arrows: [
+        {
+          from: [1.1, 0.55, 0.1],
+          to: [2.35, 0.85, 0.4],
+          color: colors.alc,
+        },
+      ],
     },
 
     {
       title: "Addition du second alcool",
       caption:
-        "Un second R′OH attaque l'ion oxocarbenium.",
+        "Un deuxième R′OH attaque l'ion oxocarbenium pour former l'intermédiaire protoné.",
       atoms: [
         {
           id: "C",
@@ -950,7 +977,6 @@ function acetalSteps(): MoleculeStep[] {
           id: "O1",
           symbol: "O",
           position: [1.25, 0.8, 0] as [number, number, number],
-          charge: "+",
         },
         {
           id: "R1",
@@ -962,6 +988,7 @@ function acetalSteps(): MoleculeStep[] {
           id: "O2",
           symbol: "O",
           position: [1.3, -0.8, 0.7] as [number, number, number],
+          charge: "+",
         },
         {
           id: "R2",
@@ -1008,12 +1035,19 @@ function acetalSteps(): MoleculeStep[] {
           to: "Rp",
         },
       ],
+      arrows: [
+        {
+          from: [3.0, -0.4, 1.0],
+          to: [0.2, 0, 0.05],
+          color: colors.alc,
+        },
+      ],
     },
 
     {
-      title: "Acétal",
+      title: "Déprotonation",
       caption:
-        "Déprotonation finale: formation de l'acétal R₂C(OR′)₂.",
+        "Une base retire le proton du groupe OR′H⁺ pour donner l'acétal neutre.",
       atoms: [
         {
           id: "C",
@@ -1451,26 +1485,21 @@ function grignardSteps(): MoleculeStep[] {
 function hcnSteps(): MoleculeStep[] {
   return [
     {
-      title: "Polarisation de HCN",
+      title: "Formation de CN⁻",
       caption:
-        "HCN est un acide faible. En présence d'une base, il peut fournir CN⁻, qui agit comme nucléophile.",
+        "HCN peut fournir CN⁻ en présence d'une base; CN⁻ est le nucléophile qui attaque le carbonyle.",
       atoms: [
         ...carbonyl().atoms,
         {
           id: "CNc",
           symbol: "C",
           position: [3.4, -0.5, 0.6] as [number, number, number],
-          label: "C≡N",
+          charge: "-",
         },
         {
           id: "N",
           symbol: "N",
           position: [4.5, -0.5, 0.6] as [number, number, number],
-        },
-        {
-          id: "H",
-          symbol: "H",
-          position: [3.4, -1.35, 0.6] as [number, number, number],
         },
       ],
       bonds: [
@@ -1479,11 +1508,6 @@ function hcnSteps(): MoleculeStep[] {
           from: "CNc",
           to: "N",
           order: 3,
-        },
-        {
-          from: "CNc",
-          to: "H",
-          dashed: true,
         },
       ],
       arrows: [
@@ -1498,7 +1522,7 @@ function hcnSteps(): MoleculeStep[] {
     {
       title: "Addition nucléophile de CN⁻",
       caption:
-        "CN⁻ attaque le carbone électrophile du carbonyle. La liaison π(C=O) se déplace vers l'oxygène.",
+        "CN⁻ attaque le carbone électrophile du carbonyle et la liaison π(C=O) se déplace vers l'oxygène.",
       atoms: [
         {
           id: "C",
@@ -1750,7 +1774,6 @@ function hcnSteps(): MoleculeStep[] {
           id: "CNc",
           symbol: "C",
           position: [1.3, -0.8, 0.7] as [number, number, number],
-          label: "C",
         },
         {
           id: "N",
