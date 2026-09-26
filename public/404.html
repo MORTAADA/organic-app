@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organic Chemistry</title>
+  <script>
+    // GitHub Pages SPA fallback
+    const path = window.location.pathname;
+    const repo = "/organic-app";
+
+    if (path.startsWith(repo) && path !== repo + "/" && !path.includes(".")) {
+      const route = path.slice(repo.length);
+      sessionStorage.setItem("redirect", route + window.location.search + window.location.hash);
+      window.location.replace(repo + "/");
+    }
+  </script>
+</head>
+<body>
+  <p>Loading...</p>
+</body>
+</html>
