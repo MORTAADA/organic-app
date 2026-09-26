@@ -1,4 +1,3 @@
-```ts
 import type { Atom3D, Bond3D } from "@/components/Molecule3D";
 import type { ReactionId } from "./reactions";
 
@@ -21,14 +20,6 @@ const C = [
     position: [0, 0, 0] as [number, number, number],
   },
 ];
-
-const colors = {
-  hyd: "#38bdf8",
-  amine: "#a78bfa",
-  alc: "#34d399",
-  g: "#fb923c",
-  hcn: "#facc15",
-};
 
 function carbonyl() {
   return {
@@ -65,6 +56,14 @@ function carbonyl() {
     ],
   };
 }
+
+const colors = {
+  hyd: "#38bdf8",
+  amine: "#a78bfa",
+  alc: "#34d399",
+  g: "#fb923c",
+  hcn: "#facc15",
+};
 
 function tetra(extra: Atom3D[], extraBonds: Bond3D[] = []) {
   return {
@@ -103,86 +102,47 @@ function tetra(extra: Atom3D[], extraBonds: Bond3D[] = []) {
   };
 }
 
-/* =========================================================
+/* ============================================================
    HYDRATATION DU CARBONE CARBONYLÉ
-   ========================================================= */
+   ============================================================ */
 
 function hydratationSteps(): MoleculeStep[] {
   return [
     {
       title: "Protonation du carbonyle",
       caption:
-        "H₃O⁺ transfère un proton à l’oxygène du carbonyle. Le carbone carbonylé devient plus électrophile.",
+        "H₃O⁺ protonne l'oxygène du carbonyle; le carbone devient plus électrophile.",
       atoms: [
+        ...carbonyl().atoms,
         {
-          id: "C",
-          symbol: "C",
-          position: [0, 0, 0] as [number, number, number],
-          charge: "δ+",
-        },
-        {
-          id: "O",
+          id: "H3O",
           symbol: "O",
-          position: [1.35, 0.9, 0] as [number, number, number],
+          position: [3.5, -0.3, 0.5] as [number, number, number],
           charge: "+",
         },
         {
-          id: "Hc",
+          id: "H",
           symbol: "H",
-          position: [2.1, 1.35, 0.1] as [number, number, number],
-        },
-        {
-          id: "R",
-          symbol: "R",
-          position: [-1.3, 0.6, 0.2] as [number, number, number],
-          label: "R",
-        },
-        {
-          id: "Rp",
-          symbol: "R",
-          position: [-0.3, -1.3, -0.2] as [number, number, number],
-          label: "R′",
-        },
-
-        // Molécule d'eau / milieu protonique
-        {
-          id: "H2O",
-          symbol: "O",
-          position: [3.8, -0.2, 0.5] as [number, number, number],
-          label: "H₂O",
-        },
-        {
-          id: "H2O_H1",
-          symbol: "H",
-          position: [4.45, 0.35, 0.55] as [number, number, number],
-        },
-        {
-          id: "H2O_H2",
-          symbol: "H",
-          position: [4.45, -0.7, 0.55] as [number, number, number],
+          position: [4.2, 0.2, 0.5] as [number, number, number],
         },
       ],
       bonds: [
-        { from: "C", to: "O" },
-        { from: "O", to: "Hc" },
-        { from: "C", to: "R" },
-        { from: "C", to: "Rp" },
-        { from: "H2O", to: "H2O_H1" },
-        { from: "H2O", to: "H2O_H2" },
+        ...carbonyl().bonds,
+        { from: "H3O", to: "H" },
       ],
       arrows: [
         {
-          from: [1.05, 0.7, 0.05],
-          to: [2.0, 1.25, 0.1],
+          from: [1.1, 0.7, 0.05],
+          to: [3.2, -0.15, 0.4],
           color: colors.hyd,
         },
       ],
     },
 
     {
-      title: "Attaque de l’eau",
+      title: "Attaque de l'eau",
       caption:
-        "H₂O attaque le carbone carbonylé. La liaison π(C=O) se déplace vers l’oxygène du carbonyle.",
+        "H₂O attaque C; simultanément π(C=O) se déplace vers O.",
       atoms: [
         {
           id: "C",
@@ -193,11 +153,7 @@ function hydratationSteps(): MoleculeStep[] {
           id: "O",
           symbol: "O",
           position: [1.35, 0.9, 0] as [number, number, number],
-        },
-        {
-          id: "Hc",
-          symbol: "H",
-          position: [2.1, 1.35, 0.1] as [number, number, number],
+          charge: "+",
         },
         {
           id: "R",
@@ -211,43 +167,34 @@ function hydratationSteps(): MoleculeStep[] {
           position: [-0.3, -1.3, -0.2] as [number, number, number],
           label: "R′",
         },
-
-        // Eau nucléophile
         {
           id: "Ow",
           symbol: "O",
-          position: [1.25, -0.85, 0.7] as [number, number, number],
+          position: [1.3, -0.8, 0.7] as [number, number, number],
           charge: "+",
         },
         {
-          id: "Hw1",
+          id: "Hw",
           symbol: "H",
-          position: [2.1, -0.55, 0.9] as [number, number, number],
-        },
-        {
-          id: "Hw2",
-          symbol: "H",
-          position: [1.05, -1.65, 0.9] as [number, number, number],
+          position: [2.2, -0.5, 0.9] as [number, number, number],
         },
       ],
       bonds: [
         { from: "C", to: "O" },
-        { from: "O", to: "Hc" },
         { from: "C", to: "R" },
         { from: "C", to: "Rp" },
         { from: "C", to: "Ow" },
-        { from: "Ow", to: "Hw1" },
-        { from: "Ow", to: "Hw2" },
+        { from: "Ow", to: "Hw" },
       ],
       arrows: [
         {
-          from: [1.05, -0.65, 0.7],
+          from: [1.05, -0.55, 0.7],
           to: [0.2, 0, 0.1],
           color: colors.hyd,
         },
         {
           from: [0.75, 0.55, 0.05],
-          to: [1.2, 0.82, 0.05],
+          to: [1.2, 0.78, 0.05],
           color: colors.hyd,
         },
       ],
@@ -256,7 +203,7 @@ function hydratationSteps(): MoleculeStep[] {
     {
       title: "Déprotonation",
       caption:
-        "Une molécule d’eau retire un proton du groupe OH₂⁺. Le gem-diol neutre se forme et H₃O⁺ est régénéré.",
+        "Une base du milieu retire le proton du groupe OH₂⁺; H₃O⁺ est régénéré.",
       atoms: [
         {
           id: "C",
@@ -264,24 +211,9 @@ function hydratationSteps(): MoleculeStep[] {
           position: [0, 0, 0] as [number, number, number],
         },
         {
-          id: "O1",
+          id: "O",
           symbol: "O",
-          position: [1.25, 0.9, 0] as [number, number, number],
-        },
-        {
-          id: "H1",
-          symbol: "H",
-          position: [2.1, 1.25, 0.1] as [number, number, number],
-        },
-        {
-          id: "O2",
-          symbol: "O",
-          position: [1.25, -0.85, 0.6] as [number, number, number],
-        },
-        {
-          id: "H2",
-          symbol: "H",
-          position: [2.1, -1.15, 0.75] as [number, number, number],
+          position: [1.35, 0.9, 0] as [number, number, number],
         },
         {
           id: "R",
@@ -295,47 +227,40 @@ function hydratationSteps(): MoleculeStep[] {
           position: [-0.3, -1.3, -0.2] as [number, number, number],
           label: "R′",
         },
-
-        // H₃O⁺ régénéré
         {
-          id: "Hydronium",
+          id: "Ow",
           symbol: "O",
-          position: [4.0, -0.3, 0.5] as [number, number, number],
+          position: [1.3, -0.8, 0.7] as [number, number, number],
           charge: "+",
-          label: "H₃O⁺",
         },
         {
-          id: "H3_1",
+          id: "Hw",
           symbol: "H",
-          position: [4.75, 0.25, 0.55] as [number, number, number],
+          position: [2.2, -0.5, 0.9] as [number, number, number],
         },
         {
-          id: "H3_2",
-          symbol: "H",
-          position: [4.75, -0.85, 0.55] as [number, number, number],
-        },
-        {
-          id: "H3_3",
-          symbol: "H",
-          position: [3.95, -0.3, 1.35] as [number, number, number],
+          id: "Base",
+          symbol: "O",
+          position: [4, -0.4, 0.5] as [number, number, number],
+          label: "H₂O",
         },
       ],
       bonds: [
-        { from: "C", to: "O1" },
-        { from: "O1", to: "H1" },
-        { from: "C", to: "O2" },
-        { from: "O2", to: "H2" },
+        { from: "C", to: "O" },
         { from: "C", to: "R" },
         { from: "C", to: "Rp" },
-
-        { from: "Hydronium", to: "H3_1" },
-        { from: "Hydronium", to: "H3_2" },
-        { from: "Hydronium", to: "H3_3" },
+        { from: "C", to: "Ow" },
+        { from: "Ow", to: "Hw" },
       ],
       arrows: [
         {
-          from: [3.65, -0.25, 0.5],
-          to: [2.0, -1.05, 0.7],
+          from: [3.7, -0.25, 0.5],
+          to: [2.25, -0.45, 0.8],
+          color: colors.hyd,
+        },
+        {
+          from: [2.05, -0.55, 0.85],
+          to: [1.5, -0.7, 0.7],
           color: colors.hyd,
         },
       ],
@@ -344,7 +269,7 @@ function hydratationSteps(): MoleculeStep[] {
     {
       title: "Gem-diol",
       caption:
-        "Produit final : R₂C(OH)₂. L’hydratation du carbonyle est un équilibre réversible.",
+        "Produit final: R₂C(OH)₂; l'hydratation reste un équilibre réversible.",
       atoms: [
         {
           id: "C",
@@ -396,157 +321,31 @@ function hydratationSteps(): MoleculeStep[] {
   ];
 }
 
-/* =========================================================
+/* ============================================================
    ADDITION D'UNE AMINE — FORMATION D'UNE IMINE
-   ========================================================= */
+   ============================================================ */
 
 function amineSteps(): MoleculeStep[] {
-  const base = (charged = false) => [
-    {
-      id: "C",
-      symbol: "C",
-      position: [0, 0, 0] as [number, number, number],
-    },
-    {
-      id: "R",
-      symbol: "R",
-      position: [-1.3, 0.6, 0.2] as [number, number, number],
-      label: "R",
-    },
-    {
-      id: "Rp",
-      symbol: "R",
-      position: [-0.3, -1.3, -0.2] as [number, number, number],
-      label: "R′",
-    },
-    {
-      id: "N",
-      symbol: "N",
-      position: [1.3, -0.7, 0.7] as [number, number, number],
-      charge: charged ? "+" : undefined,
-    },
-    {
-      id: "Rn",
-      symbol: "R",
-      position: [2.3, -0.7, 1.4] as [number, number, number],
-      label: "R″",
-    },
-    {
-      id: "Hn",
-      symbol: "H",
-      position: [1.4, -1.5, 0.9] as [number, number, number],
-    },
-  ];
-
   return [
+    /* ---------------------------------------------------------
+       1 — Carbonyle + amine
+       --------------------------------------------------------- */
     {
-      title: "Addition nucléophile",
+      title: "1. Carbonyle + amine",
       caption:
-        "R″NH₂ attaque le carbone du carbonyle; π(C=O) se déplace vers O.",
-      atoms: [
-        ...carbonyl().atoms,
-        {
-          id: "N",
-          symbol: "N",
-          position: [1.4, -0.7, 0.7] as [number, number, number],
-        },
-        {
-          id: "Hn1",
-          symbol: "H",
-          position: [2.1, -0.7, 1.3] as [number, number, number],
-        },
-        {
-          id: "Hn2",
-          symbol: "H",
-          position: [1.3, -1.5, 0.8] as [number, number, number],
-        },
-        {
-          id: "Rn",
-          symbol: "R",
-          position: [2.1, -0.7, 0] as [number, number, number],
-          label: "R″",
-        },
-      ],
-      bonds: [
-        ...carbonyl().bonds,
-        { from: "C", to: "N" },
-        { from: "N", to: "Hn1" },
-        { from: "N", to: "Hn2" },
-        { from: "N", to: "Rn" },
-      ],
-      arrows: [
-        {
-          from: [1.1, -0.5, 0.7],
-          to: [0.2, 0, 0.1],
-          color: colors.amine,
-        },
-        {
-          from: [0.75, 0.55, 0.05],
-          to: [1.2, 0.78, 0.05],
-          color: colors.amine,
-        },
-      ],
-    },
-
-    {
-      title: "Carbinolamine",
-      caption: "Après transferts de protons: R₂C(OH)-NHR″.",
-      atoms: [
-        ...base(),
-        {
-          id: "O",
-          symbol: "O",
-          position: [1.35, 0.9, 0] as [number, number, number],
-        },
-      ],
-      bonds: [
-        { from: "C", to: "O" },
-        { from: "C", to: "R" },
-        { from: "C", to: "Rp" },
-        { from: "C", to: "N" },
-        { from: "N", to: "Rn" },
-        { from: "N", to: "Hn" },
-        { from: "O", to: "Hn" },
-      ],
-    },
-
-    {
-      title: "OH protoné",
-      caption: "Le OH devient OH₂⁺, un bon groupe partant.",
-      atoms: [
-        ...base(true),
-        {
-          id: "O",
-          symbol: "O",
-          position: [1.35, 0.9, 0] as [number, number, number],
-          charge: "+",
-        },
-        {
-          id: "Ho",
-          symbol: "H",
-          position: [2.1, 1.2, 0.1] as [number, number, number],
-        },
-      ],
-      bonds: [
-        { from: "C", to: "O" },
-        { from: "C", to: "R" },
-        { from: "C", to: "Rp" },
-        { from: "C", to: "N" },
-        { from: "N", to: "Rn" },
-        { from: "N", to: "Hn" },
-        { from: "O", to: "Ho" },
-      ],
-    },
-
-    {
-      title: "Élimination de l'eau",
-      caption:
-        "Le doublet de N forme C=N; la liaison C–OH₂ se rompt vers O.",
+        "Le carbone du carbonyle est électrophile. Le doublet libre de l'amine peut l'attaquer.",
       atoms: [
         {
           id: "C",
           symbol: "C",
           position: [0, 0, 0] as [number, number, number],
+          charge: "δ+",
+        },
+        {
+          id: "O",
+          symbol: "O",
+          position: [1.35, 0.9, 0] as [number, number, number],
+          charge: "δ-",
         },
         {
           id: "R",
@@ -560,54 +359,374 @@ function amineSteps(): MoleculeStep[] {
           position: [-0.3, -1.3, -0.2] as [number, number, number],
           label: "R′",
         },
+
         {
           id: "N",
           symbol: "N",
+          position: [3.0, 0, 0] as [number, number, number],
+        },
+        {
+          id: "N-H1",
+          symbol: "H",
+          position: [3.5, 0.75, 0] as [number, number, number],
+        },
+        {
+          id: "N-H2",
+          symbol: "H",
+          position: [3.5, -0.75, 0] as [number, number, number],
+        },
+        {
+          id: "N-R",
+          symbol: "R",
+          position: [4.2, 0, 0] as [number, number, number],
+          label: "R″",
+        },
+      ],
+      bonds: [
+        { from: "C", to: "O", order: 2 },
+        { from: "C", to: "R" },
+        { from: "C", to: "Rp" },
+
+        { from: "N", to: "N-H1" },
+        { from: "N", to: "N-H2" },
+        { from: "N", to: "N-R" },
+      ],
+      arrows: [
+        {
+          from: [2.6, 0, 0],
+          to: [0.45, 0, 0],
+          color: colors.amine,
+        },
+        {
+          from: [0.9, 0.45, 0],
+          to: [1.35, 0.9, 0],
+          color: colors.amine,
+        },
+      ],
+    },
+
+    /* ---------------------------------------------------------
+       2 — Addition nucléophile
+       --------------------------------------------------------- */
+    {
+      title: "2. Attaque nucléophile",
+      caption:
+        "L'amine forme une liaison C–N tandis que le doublet π du carbonyle se déplace vers l'oxygène.",
+      atoms: [
+        {
+          id: "C",
+          symbol: "C",
+          position: [0, 0, 0] as [number, number, number],
+        },
+        {
+          id: "O",
+          symbol: "O",
           position: [1.35, 0.9, 0] as [number, number, number],
+          charge: "-",
+        },
+        {
+          id: "R",
+          symbol: "R",
+          position: [-1.3, 0.6, 0.2] as [number, number, number],
+          label: "R",
+        },
+        {
+          id: "Rp",
+          symbol: "R",
+          position: [-0.3, -1.3, -0.2] as [number, number, number],
+          label: "R′",
+        },
+
+        {
+          id: "N",
+          symbol: "N",
+          position: [1.35, -0.85, 0] as [number, number, number],
           charge: "+",
         },
         {
-          id: "Rn",
+          id: "N-H1",
+          symbol: "H",
+          position: [2.1, -1.45, 0] as [number, number, number],
+        },
+        {
+          id: "N-H2",
+          symbol: "H",
+          position: [2.2, -0.25, 0] as [number, number, number],
+        },
+        {
+          id: "N-R",
           symbol: "R",
-          position: [2.35, 1.25, 0.1] as [number, number, number],
+          position: [2.75, -0.9, 0] as [number, number, number],
+          label: "R″",
+        },
+      ],
+      bonds: [
+        { from: "C", to: "O" },
+        { from: "C", to: "R" },
+        { from: "C", to: "Rp" },
+        { from: "C", to: "N" },
+
+        { from: "N", to: "N-H1" },
+        { from: "N", to: "N-H2" },
+        { from: "N", to: "N-R" },
+      ],
+      arrows: [
+        {
+          from: [2.1, -0.65, 0],
+          to: [0.35, -0.1, 0],
+          color: colors.amine,
+        },
+      ],
+    },
+
+    /* ---------------------------------------------------------
+       3 — Carbinolamine
+       --------------------------------------------------------- */
+    {
+      title: "3. Carbinolamine",
+      caption:
+        "Après transfert de proton, on obtient une carbinolamine R₂C(OH)–NHR″.",
+      atoms: [
+        {
+          id: "C",
+          symbol: "C",
+          position: [0, 0, 0] as [number, number, number],
+        },
+        {
+          id: "O",
+          symbol: "O",
+          position: [1.25, 0.9, 0] as [number, number, number],
+        },
+        {
+          id: "O-H",
+          symbol: "H",
+          position: [2.05, 1.2, 0.1] as [number, number, number],
+        },
+
+        {
+          id: "R",
+          symbol: "R",
+          position: [-1.3, 0.6, 0.2] as [number, number, number],
+          label: "R",
+        },
+        {
+          id: "Rp",
+          symbol: "R",
+          position: [-0.3, -1.3, -0.2] as [number, number, number],
+          label: "R′",
+        },
+
+        {
+          id: "N",
+          symbol: "N",
+          position: [1.4, -0.9, 0] as [number, number, number],
+        },
+        {
+          id: "N-H",
+          symbol: "H",
+          position: [2.15, -1.45, 0] as [number, number, number],
+        },
+        {
+          id: "N-R",
+          symbol: "R",
+          position: [2.8, -0.8, 0] as [number, number, number],
+          label: "R″",
+        },
+      ],
+      bonds: [
+        { from: "C", to: "O" },
+        { from: "O", to: "O-H" },
+
+        { from: "C", to: "N" },
+        { from: "N", to: "N-H" },
+        { from: "N", to: "N-R" },
+
+        { from: "C", to: "R" },
+        { from: "C", to: "Rp" },
+      ],
+      arrows: [
+        {
+          from: [2.0, -0.75, 0],
+          to: [1.2, 0, 0],
+          color: colors.amine,
+        },
+      ],
+    },
+
+    /* ---------------------------------------------------------
+       4 — Protonation du OH
+       --------------------------------------------------------- */
+    {
+      title: "4. Protonation du OH",
+      caption:
+        "Le groupe OH est protoné afin de devenir un bon groupe partant sous forme d'eau.",
+      atoms: [
+        {
+          id: "C",
+          symbol: "C",
+          position: [0, 0, 0] as [number, number, number],
+        },
+        {
+          id: "O",
+          symbol: "O",
+          position: [1.25, 0.9, 0] as [number, number, number],
+          charge: "+",
+        },
+        {
+          id: "OH-H1",
+          symbol: "H",
+          position: [2.0, 1.3, 0.1] as [number, number, number],
+        },
+        {
+          id: "OH-H2",
+          symbol: "H",
+          position: [0.75, 1.65, 0] as [number, number, number],
+        },
+
+        {
+          id: "R",
+          symbol: "R",
+          position: [-1.3, 0.6, 0.2] as [number, number, number],
+          label: "R",
+        },
+        {
+          id: "Rp",
+          symbol: "R",
+          position: [-0.3, -1.3, -0.2] as [number, number, number],
+          label: "R′",
+        },
+
+        {
+          id: "N",
+          symbol: "N",
+          position: [1.4, -0.9, 0] as [number, number, number],
+        },
+        {
+          id: "N-H",
+          symbol: "H",
+          position: [2.15, -1.45, 0] as [number, number, number],
+        },
+        {
+          id: "N-R",
+          symbol: "R",
+          position: [2.8, -0.8, 0] as [number, number, number],
+          label: "R″",
+        },
+      ],
+      bonds: [
+        { from: "C", to: "O" },
+        { from: "O", to: "OH-H1" },
+        { from: "O", to: "OH-H2" },
+
+        { from: "C", to: "N" },
+        { from: "N", to: "N-H" },
+        { from: "N", to: "N-R" },
+
+        { from: "C", to: "R" },
+        { from: "C", to: "Rp" },
+      ],
+      arrows: [
+        {
+          from: [0.8, 1.8, 0],
+          to: [1.25, 1.05, 0],
+          color: colors.amine,
+        },
+      ],
+    },
+
+    /* ---------------------------------------------------------
+       5 — Départ de l'eau / ion iminium
+       --------------------------------------------------------- */
+    {
+      title: "5. Élimination de H₂O",
+      caption:
+        "L'eau quitte le carbone et le doublet de l'azote forme la liaison π C=N. On obtient un ion iminium.",
+      atoms: [
+        {
+          id: "C",
+          symbol: "C",
+          position: [0, 0, 0] as [number, number, number],
+        },
+        {
+          id: "N",
+          symbol: "N",
+          position: [1.4, 0, 0] as [number, number, number],
+          charge: "+",
+        },
+
+        {
+          id: "R",
+          symbol: "R",
+          position: [-1.3, 0.6, 0.2] as [number, number, number],
+          label: "R",
+        },
+        {
+          id: "Rp",
+          symbol: "R",
+          position: [-0.3, -1.3, -0.2] as [number, number, number],
+          label: "R′",
+        },
+
+        {
+          id: "N-R",
+          symbol: "R",
+          position: [2.3, -0.75, 0] as [number, number, number],
           label: "R″",
         },
         {
+          id: "N-H",
+          symbol: "H",
+          position: [2.1, 0.8, 0] as [number, number, number],
+        },
+
+        {
           id: "H2O",
           symbol: "O",
-          position: [2.5, -0.8, 0.6] as [number, number, number],
+          position: [3.0, 1.8, 0] as [number, number, number],
           label: "H₂O",
         },
       ],
       bonds: [
+        { from: "C", to: "N", order: 2 },
         { from: "C", to: "R" },
         { from: "C", to: "Rp" },
-        { from: "C", to: "N", order: 2 },
-        { from: "N", to: "Rn" },
+
+        { from: "N", to: "N-R" },
+        { from: "N", to: "N-H" },
       ],
       arrows: [
         {
-          from: [1.05, 0.75, 0.05],
-          to: [0.35, 0.05, 0.05],
+          from: [1.15, 0.05, 0],
+          to: [0.4, 0.05, 0],
           color: colors.amine,
         },
         {
-          from: [0.75, 0.55, 0.05],
-          to: [2.2, -0.65, 0.5],
+          from: [1.0, 0.6, 0],
+          to: [2.55, 1.45, 0],
           color: colors.amine,
         },
       ],
     },
 
+    /* ---------------------------------------------------------
+       6 — Imine finale
+       --------------------------------------------------------- */
     {
-      title: "Imine",
-      caption: "Déprotonation de l'ion iminium: R₂C=NR″.",
+      title: "6. Formation de l'imine",
+      caption:
+        "Après déprotonation de l'ion iminium, on obtient l'imine finale R₂C=NR″.",
       atoms: [
         {
           id: "C",
           symbol: "C",
           position: [0, 0, 0] as [number, number, number],
         },
+        {
+          id: "N",
+          symbol: "N",
+          position: [1.4, 0, 0] as [number, number, number],
+        },
+
         {
           id: "R",
           symbol: "R",
@@ -620,31 +739,27 @@ function amineSteps(): MoleculeStep[] {
           position: [-0.3, -1.3, -0.2] as [number, number, number],
           label: "R′",
         },
+
         {
-          id: "N",
-          symbol: "N",
-          position: [1.35, 0.9, 0] as [number, number, number],
-        },
-        {
-          id: "Rn",
+          id: "N-R",
           symbol: "R",
-          position: [2.35, 1.25, 0.1] as [number, number, number],
+          position: [2.35, -0.75, 0] as [number, number, number],
           label: "R″",
         },
       ],
       bonds: [
+        { from: "C", to: "N", order: 2 },
         { from: "C", to: "R" },
         { from: "C", to: "Rp" },
-        { from: "C", to: "N", order: 2 },
-        { from: "N", to: "Rn" },
+        { from: "N", to: "N-R" },
       ],
     },
   ];
 }
 
-/* =========================================================
-   FORMATION D'UN ACÉTAL
-   ========================================================= */
+/* ============================================================
+   ACÉTALISATION
+   ============================================================ */
 
 function acetalSteps(): MoleculeStep[] {
   const base = (stage: "hemi" | "ox" | "final") => {
@@ -784,7 +899,8 @@ function acetalSteps(): MoleculeStep[] {
 
     {
       title: "Hémiacétal",
-      caption: "Déprotonation donne l'hémiacétal neutre.",
+      caption:
+        "Déprotonation donne l'hémiacétal neutre.",
       ...base("hemi"),
     },
 
@@ -882,15 +998,16 @@ function acetalSteps(): MoleculeStep[] {
 
     {
       title: "Acétal",
-      caption: "Déprotonation finale: R₂C(OR′)₂.",
+      caption:
+        "Déprotonation finale: R₂C(OR′)₂.",
       ...base("final"),
     },
   ];
 }
 
-/* =========================================================
-   RÉACTION DE GRIGNARD
-   ========================================================= */
+/* ============================================================
+   GRIGNARD
+   ============================================================ */
 
 function grignardSteps(): MoleculeStep[] {
   return [
@@ -1031,7 +1148,7 @@ function grignardSteps(): MoleculeStep[] {
     {
       title: "Work-up acide",
       caption:
-        "H₃O⁺ protonne l’alcoolate pour donner l’alcool.",
+        "H₃O⁺ protonne l'alcoolate pour donner l'alcool.",
       atoms: [
         {
           id: "C",
@@ -1078,9 +1195,9 @@ function grignardSteps(): MoleculeStep[] {
   ];
 }
 
-/* =========================================================
-   ADDITION DE HCN
-   ========================================================= */
+/* ============================================================
+   HCN / CYANOHYDRINE
+   ============================================================ */
 
 function hcnSteps(): MoleculeStep[] {
   return [
@@ -1233,9 +1350,9 @@ function hcnSteps(): MoleculeStep[] {
   ];
 }
 
-/* =========================================================
-   EXPORT GLOBAL
-   ========================================================= */
+/* ============================================================
+   EXPORT
+   ============================================================ */
 
 export const MOLECULE_STEPS: Record<ReactionId, MoleculeStep[]> = {
   hydratation: hydratationSteps(),
@@ -1244,4 +1361,3 @@ export const MOLECULE_STEPS: Record<ReactionId, MoleculeStep[]> = {
   grignard: grignardSteps(),
   hcn: hcnSteps(),
 };
-```
