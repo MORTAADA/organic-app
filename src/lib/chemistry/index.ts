@@ -1,10 +1,5 @@
 /* =========================================================
    Chemistry Model — Point d'entrée principal
-
-   Tous les types du modèle chimique sont exportés depuis
-   ce fichier afin que les autres parties de l'application
-   n'aient pas besoin de connaître la structure interne
-   du dossier chemistry.
    ========================================================= */
 
 export type {
@@ -37,3 +32,33 @@ export type {
   ReactionStepDescription,
   Reaction,
 } from "./types";
+
+/* =========================================================
+   Utilitaires Molecule
+   ========================================================= */
+
+export {
+  createMolecule,
+  getAtom,
+  getBond,
+  getBondBetweenAtoms,
+  hasAtom,
+  hasBond,
+  addAtom,
+  addBond,
+  removeAtom,
+  removeBond,
+} from "./molecule";
+
+/* =========================================================
+   Utilitaires Mechanism
+   ========================================================= */
+
+export {
+  createMechanism,
+  getMechanismStep,
+  getMechanismStepAt,
+  getMechanismStepCount,
+  hasMechanismStepAt,
+  addMechanismStep,
+} from "./mechanism";
